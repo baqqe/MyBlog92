@@ -1,0 +1,284 @@
+---
+title: 'Manifesto: Introducing the Analytical Engineer'
+author: "Lucas Bagge"
+date: "2020-10-29"
+categories:
+- dbt
+- Analytical Engineer
+tags: dbt
+subtitle: ''
+summary: '.'
+featured: false
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: true
+projects: []
+slug: dbt
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(cache = TRUE, warning = FALSE, message = FALSE, 
+                      echo = TRUE, dpi = 300, cache.lazy = FALSE,
+                      tidy = "styler", fig.width = 8, fig.height = 5)
+library(scales)
+library(tidyverse)
+```
+
+## Introduction
+
+In the rapidly evolving landscape of data-driven decision-making, our department faces unique challenges that stem primarily from the complex and multifaceted nature of the data we handle daily. Our data often exhibits issues with quality and consistency, leading to significant obstacles in deriving accurate insights. These problems are exacerbated by inadequate documentation and limited observability of data transformations, which impedes our ability to trace issues back to their sources and understand the underlying processes at work.
+
+To address these challenges, we are taking a significant step forward by introducing a new role: the Analytical Engineer. This position is designed to bridge the gap between Data Analysts and Data Engineers, combining the best of both worlds to drive deeper insights and more efficient data processes. Through this role, we aim to enhance data quality, improve documentation and observability, and foster a more robust and transparent data environment. This manifesto outlines the distinctions between Data Analysts and Data Engineers, defines the crucial responsibilities of an Analytical Engineer, and highlights the anticipated impacts of this role in solving the issues we currently face.
+
+## The Roles: Data Analyst vs. Data Engineer
+
+### Data Analyst
+
+Data Analysts are pivotal in interpreting data and providing actionable insights. Their key responsibilities include:
+
+- **Data Interpretation:** Transforming complex data into understandable formats, often through visualizations and reports.
+
+- **Trend Analysis:** Identifying patterns and trends to support business decisions.
+
+- **Reporting:** Communicating findings to stakeholders through dashboards and presentations.
+
+- **Tools and Techniques:** Utilizing tools like Excel, SQL, Tableau, and statistical analysis software to perform their analyses.
+
+### Data Engineer
+
+Data Engineers are the architects of data infrastructure. Their primary responsibilities include:
+
+- **Data Pipeline Development:** Building and maintaining the architecture (e.g., databases, large-scale processing systems).
+
+- **Data Integration:** Ensuring data from various sources is accurately integrated and accessible.
+
+- **Optimization:** Enhancing the performance of data systems and ensuring scalability.
+
+- **Tools and Techniques:** Employing technologies such as Hadoop, Spark, SQL, and various programming languages (e.g., Python, Java) to manage data systems.
+
+## Introducing the Analytical Engineer
+
+The Analytical Engineer role is designed to synergize the analytical capabilities of a Data Analyst with the technical prowess of a Data Engineer. This role addresses the need for individuals who can both manage data infrastructure and derive meaningful insights from data. The key responsibilities of an Analytical Engineer include:
+
+- **Data Pipeline Management:** Developing and maintaining robust data pipelines to ensure seamless data flow from collection to analysis.
+
+- **Advanced Analytics:** Conducting in-depth analyses using sophisticated tools and techniques to uncover deeper insights.
+
+- **Automation:** Automating repetitive tasks in data processing and analysis to improve efficiency and accuracy.
+
+- **Collaboration:** Working closely with Data Analysts and Data Engineers to ensure data is both reliable and actionable.
+
+- **Tool Proficiency:** Mastery of a wide range of tools including ETL platforms, data warehouses, statistical analysis software, and programming languages.
+
+Data Analysts focus on analyzing data, developing dashboards and reports, and uncovering insights that influence business decisions. Their work centers around descriptive, diagnostic, and prescriptive analytics, requiring constant interaction with business stakeholders and leadership. In addition to technical capabilities such as SQL, Python/R, and BI tools, they must possess significant domain knowledge to deliver relevant analyses. Data Analysts are often responsible for cleaning and preparing (modeling) data before delivering information.
+
+Conversely, Data Engineers are concerned with designing, building, and maintaining the infrastructure that supports analytics engineers and downstream users, such as data analysts and data scientists. They work closely with these roles and other stakeholders to ensure that this infrastructure enables analytics-driven decisions. Data Engineers are also often responsible for custom data extraction pipelines that require custom Python code. High proficiency in Python, including an understanding of Object-Oriented Programming (OOP) paradigms, SQL, CI/CD, orchestration, and infrastructure as code is expected. Depending on the organization and tasks involved, other programming languages might be necessary, such as Scala and Java.
+
+Therefore, the Analytics Engineer serves as a bridge between Data Engineers and Analysts, focusing on the entire data domain from raw, cleaned, and prepared data to the point of information delivery. Analytics Engineers often leverage tools from the Modern Data Stack to achieve this task. A key tool is dbt, which allows analytics engineers to transform data using SQL, testing and documenting these transformations while tracking data lineage. For this role, high proficiency in SQL, Python, data modeling techniques, and an understanding of orchestration and CI/CD principles are necessary. Business acumen is also essential to understand how to contribute to business value through relevant data models that represent business processes and enable key decisions.
+
+## Applying Software Engineering Best Practices in Analytical Engineering
+
+The field of software engineering has undergone significant transformations since its inception, evolving from structured programming and the waterfall model to the adoption of agile methodologies, continuous integration/continuous delivery (CI/CD), and DevOps. These advancements have greatly enhanced the flexibility, efficiency, and quality of software development processes.
+
+In the context of analytical engineering, these best practices are being integrated to streamline data processes and ensure high-quality outcomes. One of the core practices is treating data transformations as code. With tools like dbt, transformations are scripted in SQL and Jinja, allowing for greater transparency and flexibility compared to traditional GUI-based ETL tools.
+
+Version control is another crucial practice, implemented through systems like Git. This approach provides a detailed audit trail of changes, facilitates collaborative development, and supports branching and merging strategies, thereby enhancing the robustness and scalability of data projects.
+
+Modularity is emphasized in analytical engineering to reduce redundancy and improve maintainability. dbt's modular structure allows for defining transformations once and reusing them through references, macros, packages, and reusable test suites. This approach prevents the common pitfalls of traditional ETL scripts, which often suffer from interdependencies and duplicated code.
+
+Automated testing, a staple in software engineering, is employed to ensure data reliability. Continuous integration processes run automated checks on data transformations to catch issues early. This practice minimizes the risk of errors in production and maintains high data quality.
+
+Continuous delivery streamlines the deployment process, enabling frequent and stable updates to data pipelines. This practice, combined with automated testing, ensures that changes can be safely and quickly pushed to production, similar to high-performing software development teams.
+
+Documentation is another area where analytical engineering benefits from software engineering practices. dbt includes features for inline documentation, making data models self-explanatory and easily accessible. This documentation can be automatically extracted to create a continually updated data dictionary, improving transparency and usability for all stakeholders.
+
+By adopting these software engineering best practices, analytical engineering bridges the gap between data management and software development, fostering a robust and scalable data infrastructure that enhances the overall quality and efficiency of data-driven decision-making.
+
+
+## Duties and Responsibilities of an Analytical Engineer
+
+An Analytical Engineer role blurs the line between technology and business, so the responsibilities may differ greatly from company to company. Below are the core duties that this data specialist may undertake:
+
+- **Data Modeling:** Creating clean, tested, and reusable datasets to facilitate data understanding and usage.
+
+- **Data Transformation:** Applying various transformations to data, such as removing inaccuracies, aggregating data, filtering, joining tables, and splitting columns.
+
+- **Data Documentation:** Maintaining data documentation to ensure consistent use of definitions and language across the team.
+
+- **Defining Data Quality Rules:** Establishing data quality standards, metrics, and cleansing algorithms to ensure data accuracy and reliability.
+
+- **Setting Software Engineering Best Practices:** Adopting practices like version control, data unit testing, and CI/CD to maintain data integrity. Tools like dbt (data build tool) help implement these practices by turning data transformations into code, which can be managed with source control systems like Git. This approach allows for modular code, automated testing, and continuous integration and delivery, similar to software engineering practices. dbt facilitates transformations as code, source control, modularity, versioning, automated testing, and documentation, significantly improving the quality and maintainability of data pipelines.
+- **Data Storytelling:** Translating complex data into engaging narratives through advanced visualizations, interactive dashboards, and root cause analysis. This role involves crafting stories that explain trends, predict outcomes, and inform strategic decisions using BI tools.
+
+- **Collaboration:** Working closely with data engineers, business analysts, and data scientists to align business requirements with data assets.
+
+## Skills and Toolkit Knowledge of an Analytical Engineer
+
+An Analytical Engineer is expected to possess a broad skill set, including:
+
+- **Experience in Data:** Proficiency in working within data-driven environments.
+
+- **Strong SQL Skills:** Expertise in SQL for data transformations and modeling.
+
+- **Programming Languages:** Knowledge of R and Python for data orchestration tasks.
+
+- **dbt Technology:** Proficiency with dbt for implementing analytics code using SQL.
+
+- **Software Engineering Best Practices:** Applying engineering principles to analytics.
+
+- **Git Expertise:** Familiarity with version control using Git.
+
+- **Data Engineering and BI Tools:** Hands-on experience with tools like Snowflake, Redshift, BigQuery, AWS Glue, Talend, Tableau, and Looker.
+
+- **Interpersonal and Communication Skills:** Effective communication and collaboration with team members and stakeholders.
+
+## The Role of Data Teams in Supporting the Analytical Engineer
+
+The formation and success of data teams are pivotal in analytics engineering, playing a crucial role in integrating business intelligence, data science, and data engineering to create actionable insights from data. As such, these teams must be meticulously assembled and effectively managed to align with the organization’s goals and success metrics.
+
+### Building Effective Data Teams
+Building a successful data team involves selecting individuals who not only possess the necessary technical skills but also share the company’s vision and demonstrate a passion for the mission. It’s important to establish clear success metrics based on the organization’s specific needs and the desired business outcomes. These metrics help to track the effectiveness of the team and guide its strategic direction.
+
+### Key Processes in Data Teams
+The processes adopted by data teams should promote cross-functional collaboration, ensuring that engineers, analysts, and business stakeholders work closely together. This collaboration is facilitated by regular communication and shared goals, which help align the team’s output with business objectives. Adopting agile methodologies, like sprints and scrum ceremonies, can further enhance teamwork and productivity, particularly in remote setups.
+
+### Tools and Common Pitfalls
+Supporting the analytics team with the right tools is essential for efficiency and effectiveness. Tools like Google Cloud services, GitHub, Jira, and Slack can help manage projects and enhance communication. However, teams must be wary of common pitfalls such as a lack of clarity on business outcomes, which can lead to misalignment with customer needs and business objectives.
+
+By focusing on these aspects, data teams can drive significant value for the organization, enabling more informed decision-making and fostering a culture of data-driven innovation.
+
+
+## The Impact of the Analytical Engineer
+
+The introduction of the Analytical Engineer will bring several benefits to our department:
+
+- **Enhanced Efficiency:** Streamlining data processes will reduce the time from data collection to actionable insights, helping us respond more quickly to customer needs and market changes.
+
+- **Deeper Insights:** Combining analytical and engineering skills will enable more comprehensive and sophisticated data analysis, allowing us to predict trends and enhance decision-making accuracy.
+
+- **Improved Collaboration:** This role will serve as a bridge, fostering better communication and collaboration between data analysts and engineers, thereby improving project outcomes and efficiency.
+
+- **Innovation:** The Analytical Engineer will drive innovation by integrating cutting-edge technologies and methodologies into our data practices, positioning us at the forefront of industry advancements.
+
+- **Risk Management:** By improving data quality and documentation, Analytical Engineers help minimize the risk associated with data-driven decisions. Enhanced data integrity reduces errors and ensures compliance with regulatory standards, which is critical in industries facing stringent data regulations.
+
+- **Scalability:** As our data infrastructure becomes more robust and efficient, it will be easier to scale our operations to meet growing business demands. This scalability is crucial for adapting to new challenges and expanding our market presence.
+
+- **Cost Efficiency:** Improved data management and process automation reduce operational costs by eliminating redundancies and optimizing resource allocation.
+
+Without an Analytical Engineer, data teams often struggle with the quality and reliability of data models. Data engineers may be overworked trying to maintain infrastructure while also working on data modeling. Analysts may find it hard to trust the metrics they report due to limited visibility into the complex transformation process. When metrics are inaccurate, business stakeholders can lose trust in the data, ultimately impacting business performance.
+
+The Analytical Engineer addresses these issues by ensuring high-quality, reliable data models, thus allowing data engineers to focus on infrastructure and analysts to confidently deliver insights. This role is crucial for sustainable business operations, acting as a bridge between data engineers and analysts, and facilitating a smooth and efficient data workflow. Moreover, it promotes a culture of continuous improvement and adherence to best practices, which are essential for long-term success.
+
+
+
+## The eight dimensions of data quality
+
+**"Data quality"** is one of those terms that people talk about without much specificity. Everyone wants high-quality data—why wouldn’t they? High-quality data is the stuff of **"data-driven decision making"** and **"building a data-driven culture,"** goals every company in the world is pursuing.
+
+Yet, data quality is more than **"timely, accurate, and complete"** data. And even these terms warrant further investigation. For example, how timely does the data need to be? Do you actually need it in real-time or is that just something that sounds good? What are the business needs and justifications for data to be that timely? Do the costs and complexity warrant real-time data?
+
+We need a more complete way of understanding and measuring data quality. Let’s go beyond the buzzwords and get specific. In this article, we'll dive into a practical framework and data quality definition that'll help you understand and measure data quality in a way that actually makes sense for your business.
+
+Data quality solves problems, and not every problem requires the same level of data quality. So, we need ways to articulate data quality and compare it to the requirements of solving the problem.
+
+We propose these eight dimensions to ensure data quality:
+
+- **Accuracy:** The data represents reality
+- **Completeness:** All the required data is present
+- **Consistency:** Data is consistent across different datasets and databases
+- **Reliability:** The data is trustworthy and credible
+- **Timeliness:** Data is up-to-date for its intended use
+- **Uniqueness:** There are no data duplications.
+- **Usefulness:** Data is applicable and relevant to problem-solving and decision-making
+- **Differences:** Users know exactly how and where data differs
+
+### Data accuracy
+
+Accuracy in data quality means the data is correct and reliable. What you see in the data matches the real-world facts. If your data is accurate, you can trust it to help you make good decisions. Inaccurate data can make you think something is true when it's not.
+
+Data accuracy issues can arise at any time, from collection at the data source to its final transformation at the data destination. Issues at the source can be anything from a fat-finger typo from manual entry to a malfunctioning sensor to someone manipulating data to be intentionally inaccurate. Issues can also arise when data is transferred or transformed between different systems or formats.
+
+Data can get stale, and that messes with its accuracy. Like when people change emails—your old info becomes useless and incorrect.
+
+People usually measure accuracy in percentages. If your data is 95% accurate, that means it's correct 95 out of 100 times. That means you can trust your data 95% of the time you use it, or with a 95% level of confidence in its accuracy.
+
+### Data completeness
+
+It’s easy to mistake completeness as “having all the data” rather than “having all the data you need” to answer a question or solve a problem. You may find that you only need half of the rows or columns in a dataset, or you might need to join various amounts of data from a dozen tables across several data sources. Think of it as having all the pieces to complete a puzzle.
+
+The idea of completeness isn't about hoarding all the data, but about gathering just what's needed to answer a question or solve a problem. For example, a specific business issue may require only customer ID, transaction dates, and zip codes. The focus isn't necessarily on the accuracy of this data, but on ensuring all essential data points are collected to tackle the issue.
+
+Completeness is typically measured in multiple percentages. An accurate measurement requires answering questions like, “Do we have all the data we need?” from both the data column and row perspectives. If you lack the columns you need then you are unlikely to have the rows you need. If you have all the columns you need, then you must determine whether there are gaps in the rows.
+
+To test for completeness, begin by identifying the questions you're trying to answer or the problems you want to solve. List the data types essential for your objectives and compare it to the data you actually have. For instance, if your list includes customer names, emails, and phone numbers, then any missing field in your actual data counts as a gap.
+
+### Data consistency
+
+Data consistency means applying uniform practices across your data warehouse and dbt models. It includes everything from naming conventions to timestamp formatting to representing currency values. Inconsistencies might look like using CamelCase for one table name and snake-case for another. Or, you might have “24.99USD” in one table and “$24.99” in another.
+
+These inconsistencies often start right at the data source and can be a headache to manage. Take timezones, for example—there's no universal rule on how they should be formatted or included in timestamps. For data pros, fixing this mess means writing code that gives you the same results, no matter who's doing it or where it's being done.
+
+Managing data quality consistency requires establishing governable and scalable processes for your data teams. dbt allows you to easily rebuild tables and use data references. Datafold Cloud improves on dbt by plugging into your CI/CD pipeline and ensuring your data is always tested in the same way, using data diffs every time a pull request is submitted.
+
+To measure consistency, you might compare data from different sources or at different times to see if they match. If your sales numbers are the same in two different reports, they’re consistent.
+
+### Data reliability
+
+Reliable data will stay consistent every time you measure or use it. It’s like weighing yourself on a scale multiple times and getting the same result each time. If your data is reliable, you feel confident using it over and over.
+
+Reliability issues can arise if your data storage or collection methods change—which is inevitable over the course of time. If one person collects data differently than another, or if your system has glitches, your data might not be reliable. There could be gaps, inconsistencies, or even changes in how to interpret certain data.
+
+You can measure reliability with a couple of methods. One way is to run repeated tests over time to check for consistent results. Another is to compare data from different sources, like cross-referencing Google Analytics with server logs. For example, if a survey gives you the same results today as it did last week, that's a good sign of reliability. Both approaches help ensure your data stays consistent across different situations.
+
+### Data timeliness
+
+If you get data when you need it, your data is timely. Imagine needing the weather forecast for tomorrow but getting it a week later. That's not timely!
+
+Most data problems aren’t about weather forecasts, but about vaguely knowable future events that require predictive models based on historical data. Highly-competitive markets, like stock trading, often require as-real-time-as-possible data. Other problems, like monthly subscriber churn, may only require data from recent weeks or days.
+
+Many practitioners think they need real-time data, but in many cases it’s unnecessary. Data needs to be timely, yes, but it doesn’t need to be live right up to this very moment. Timeliness is about making a decision and that timeframe is different for every company and every problem. A small company might need data real fast and a large company might need that same data over the course of a year.
+
+To measure timeliness, look at the time it takes for data to transition from collection to a usable state. You might set a goal, like wanting sales data within 24 hours after a sale. If you consistently get it later, you're not hitting the timeliness mark.
+
+You can use deadlines or time-stamps to keep track, or build data freshness tests for your data sources with dbt. Try setting severity criteria, like “Salesforce data must be no more than 4 hours old or a warning goes to the data team.”
+
+### Uniqueness
+
+Uniqueness in data quality means that each piece of data is different from the rest and shows up only once. It's like having a class where every kid has a different name; it makes roll call a lot easier. If your data isn't unique, you might count the same thing twice or mix stuff up.
+
+Uniqueness is similar to completeness, but focuses on identifying and removing duplicate data. Duplicate data can show up in primary keys, as duplicate rows in one or more tables, or even as entire tables. It’s not uncommon to see tables called “customers'' and “customers_v1” in the same database.
+
+Issues with uniqueness usually occur when merging data from different places or adding new data. Combining two email newsletter lists, for example, might include the same email address twice in two rows.
+½
+Measuring uniqueness requires checking for duplicates. You can sort the data to see if anything shows up more than once or use software to find duplicates for you. If you find that 5 out of 100 records are duplicates, your data's uniqueness could be considered 95% unique. The goal is to make sure each piece of data is a "one and only" so you can trust what it's telling you.
+
+### Usefulness
+
+Usefulness is more of a heuristic than a measurable data quality dimension. It’s about whether the data actually helps people do what they need to do. If data is useful, it gives people what they need to make good decisions or solve problems. What’s useful for one person might not be for another, which makes usefulness tricky.
+
+Measuring usefulness is a matter of looking at your data goals. Ask yourself, “Does this data help me answer my questions or achieve what I'm aiming for?” If yes, it's useful. If not, you might need to find different data or ask different questions.
+
+You can also get feedback from people who use the data to see if it’s helping them out. If most folks say it's useful, you're on the right track. If not, figure out what's missing or what could be better. This requires more of a product mindset than a typical data analyst approach. Data practitioners should work with stakeholders to ensure they're aligned on what the data needs to do.
+
+And remember to start off by keeping things simple. Many times, people just need a pivot table and not a sophisticated ML model that takes weeks to develop.
+
+### Differences
+
+Data differences usually mean variations or discrepancies in the data you’re looking at. Think of it like getting different answers from two calculators; it's confusing and makes you question which one's right.
+
+These differences can happen when data is collected, stored, or processed in different ways. Sometimes it's just human error, like writing an incorrect data transformation and sometimes it’s a matter of how data sources are collecting and storing information.
+
+To measure data differences, compare the varying data points to see how far off they are from each other. You might look at averages, ranges, or specific examples where the data doesn't match up. We built data diff, a novel testing solution that helps data professionals understand the impact of data changes before pushing code to production—or between any two tables in the same (or different) databases. It provides specific metrics, down to individual columns and rows, and how data differs between two environments.
+
+
+
+## Conclusion
+
+The Analytical Engineer represents the future of data roles in our organization. By embracing this role, we are committing to a more integrated, efficient, and insightful approach to data management and analysis. This manifesto serves as our guide as we embark on this exciting journey, ensuring that we leverage the full potential of our data to drive informed decision-making and business success.
+
+
+
+

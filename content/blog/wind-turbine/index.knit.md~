@@ -1,0 +1,276 @@
+---
+title: "Tune and interpret decision trees for #TidyTuesday wind turbines"
+author: Julia Silge
+date: '2020-10-29'
+slug: wind-turbine
+categories:
+  - rstats
+  - tidymodels
+tags:
+  - rstats
+  - tidymodels
+subtitle: ''
+summary: "Use tidymodels to predict capacity for Canadian wind turbines with decision trees."
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: true
+projects: []
+---
+
+
+
+
+This is the latest in my series of [screencasts](https://juliasilge.com/category/tidymodels/) demonstrating how to use the [tidymodels](https://www.tidymodels.org/) packages, from starting out with first modeling steps to tuning more complex models.
+</br>
+
+Here is the code I used in the video, for those who prefer reading instead of or in addition to video.
+
+## Explore data
+
+Our modeling goal is to predict the capacity of wind turbines in Canada [based on other characteristics of the turbines from this week's #TidyTuesday dataset](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-10-27/readme.md). Simon Couch outlined this week [how to use stacks for ensembling with this dataset,](https://blog.simonpcouch.com/blog/gentle-intro-stacks/) but here let's take a more straightforward approach.
+
+Let's start by reading in the data.
+
+
+``` r
+library(tidyverse)
+
+turbines <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-10-27/wind-turbine.csv')
+turbines
+```
+
+```
+## # A tibble: 6,698 × 15
+##    objectid province_territory project_name           total_project_capacity_mw
+##       <dbl> <chr>              <chr>                                      <dbl>
+##  1        1 Alberta            Optimist Wind Energy                        0.9 
+##  2        2 Alberta            Castle River Wind Farm                     44   
+##  3        3 Alberta            Waterton Wind Turbines                      3.78
+##  4        4 Alberta            Waterton Wind Turbines                      3.78
+##  5        5 Alberta            Waterton Wind Turbines                      3.78
+##  6        6 Alberta            Waterton Wind Turbines                      3.78
+##  7        7 Alberta            Cowley North                               19.5 
+##  8        8 Alberta            Cowley North                               19.5 
+##  9        9 Alberta            Cowley North                               19.5 
+## 10       10 Alberta            Cowley North                               19.5 
+## # ℹ 6,688 more rows
+## # ℹ 11 more variables: turbine_identifier <chr>,
+## #   turbine_number_in_project <chr>, turbine_rated_capacity_k_w <dbl>,
+## #   rotor_diameter_m <dbl>, hub_height_m <dbl>, manufacturer <chr>,
+## #   model <chr>, commissioning_date <chr>, latitude <dbl>, longitude <dbl>,
+## #   notes <chr>
+```
+
+Let's do a bit of data cleaning and preparation.
+
+
+
+``` r
+turbines_df <- turbines %>%
+    transmute(turbine_capacity = turbine_rated_capacity_k_w, 
+              rotor_diameter_m,
+              hub_height_m,
+              commissioning_date = parse_number(commissioning_date),
+              province_territory = fct_lump_n(province_territory, 10),
+              model = fct_lump_n(model, 10)) %>%
+    filter(!is.na(turbine_capacity)) %>%
+    mutate_if(is.character, factor)
+```
+
+How is the capacity related to other characteristics like the year of commissioning or size of the turbines?
+
+
+``` r
+turbines_df %>%
+    select(turbine_capacity:commissioning_date) %>%
+    pivot_longer(rotor_diameter_m:commissioning_date) %>%
+    ggplot(aes(turbine_capacity, value)) +
+    geom_hex(bins = 15, alpha = 0.8) +
+    geom_smooth(method = "lm") +
+    facet_wrap(~name, scales = "free_y") +
+    labs(y = NULL) +
+    scale_fill_gradient(high = "cyan3")
+```
+
+<img src="index_files/figure-html/unnamed-chunk-3-1.png" width="2700" />
+
+These relationships are the kind that we want to use in modeling, whether that's the [modeling stacking Simon demonstrated](https://blog.simonpcouch.com/blog/gentle-intro-stacks/) or the single model we'll use here.
+
+## Build a model
+
+We can start by loading the tidymodels metapackage, splitting our data into training and testing sets, and creating cross-validation samples.
+
+
+``` r
+library(tidymodels)
+
+set.seed(123)
+wind_split <- initial_split(turbines_df, strata = turbine_capacity)
+wind_train <- training(wind_split)
+wind_test <- testing(wind_split)
+
+set.seed(234)
+wind_folds <- vfold_cv(wind_train, strata = turbine_capacity)
+wind_folds
+```
+
+```
+## #  10-fold cross-validation using stratification 
+## # A tibble: 10 × 2
+##    splits             id    
+##    <list>             <chr> 
+##  1 <split [4371/487]> Fold01
+##  2 <split [4372/486]> Fold02
+##  3 <split [4372/486]> Fold03
+##  4 <split [4372/486]> Fold04
+##  5 <split [4372/486]> Fold05
+##  6 <split [4372/486]> Fold06
+##  7 <split [4372/486]> Fold07
+##  8 <split [4372/486]> Fold08
+##  9 <split [4373/485]> Fold09
+## 10 <split [4374/484]> Fold10
+```
+
+Next, let's create a tunable decision tree model specification.
+
+
+``` r
+tree_spec <- decision_tree(
+    cost_complexity = tune(),
+    tree_depth = tune(),
+    min_n = tune()
+) %>%
+    set_engine("rpart") %>%
+    set_mode("regression")
+
+tree_spec
+```
+
+```
+## Decision Tree Model Specification (regression)
+## 
+## Main Arguments:
+##   cost_complexity = tune()
+##   tree_depth = tune()
+##   min_n = tune()
+## 
+## Computational engine: rpart
+```
+
+We need a set of possible parameter values to try out for the decision tree.
+
+
+``` r
+tree_grid <- grid_regular(cost_complexity(), tree_depth(), min_n(), levels = 4)
+
+tree_grid
+```
+
+```
+## # A tibble: 64 × 3
+##    cost_complexity tree_depth min_n
+##              <dbl>      <int> <int>
+##  1    0.0000000001          1     2
+##  2    0.0000001             1     2
+##  3    0.0001                1     2
+##  4    0.1                   1     2
+##  5    0.0000000001          5     2
+##  6    0.0000001             5     2
+##  7    0.0001                5     2
+##  8    0.1                   5     2
+##  9    0.0000000001         10     2
+## 10    0.0000001            10     2
+## # ℹ 54 more rows
+```
+
+Now, let's try out all the possible parameter values on all our resampled datasets. Let's use some non-default metrics, while we're at it.
+
+
+``` r
+doParallel::registerDoParallel()
+
+set.seed(345)
+tree_rs <- tune_grid(
+    tree_spec,
+    turbine_capacity ~ .,
+    resamples = wind_folds,
+    grid = tree_grid,
+    metrics = metric_set(rmse, rsq, mae, mape)
+)
+
+tree_rs
+```
+
+```
+## # Tuning results
+## # 10-fold cross-validation using stratification 
+## # A tibble: 10 × 4
+##    splits             id     .metrics           .notes          
+##    <list>             <chr>  <list>             <list>          
+##  1 <split [4371/487]> Fold01 <tibble [256 × 7]> <tibble [0 × 3]>
+##  2 <split [4372/486]> Fold02 <tibble [256 × 7]> <tibble [0 × 3]>
+##  3 <split [4372/486]> Fold03 <tibble [256 × 7]> <tibble [0 × 3]>
+##  4 <split [4372/486]> Fold04 <tibble [256 × 7]> <tibble [0 × 3]>
+##  5 <split [4372/486]> Fold05 <tibble [256 × 7]> <tibble [0 × 3]>
+##  6 <split [4372/486]> Fold06 <tibble [256 × 7]> <tibble [0 × 3]>
+##  7 <split [4372/486]> Fold07 <tibble [256 × 7]> <tibble [0 × 3]>
+##  8 <split [4372/486]> Fold08 <tibble [256 × 7]> <tibble [0 × 3]>
+##  9 <split [4373/485]> Fold09 <tibble [256 × 7]> <tibble [0 × 3]>
+## 10 <split [4374/484]> Fold10 <tibble [256 × 7]> <tibble [0 × 3]>
+```
+
+Notice that we aren't tuning a `workflow()` here, as I have often shown how to do. Instead we are tuning the model specification (accompanied by a formula preprocessor); this is so we can use the bare model in some model evaluation activities.
+
+## Evaluate model
+
+Now let's check out how we did. We can collect or visualize the metrics.
+
+
+``` r
+collect_metrics(tree_rs)
+```
+
+```
+## # A tibble: 256 × 9
+##    cost_complexity tree_depth min_n .metric .estimator    mean     n std_err
+##              <dbl>      <int> <int> <chr>   <chr>        <dbl> <int>   <dbl>
+##  1    0.0000000001          1     2 mae     standard   378.       10  3.96  
+##  2    0.0000000001          1     2 mape    standard    27.6      10  1.41  
+##  3    0.0000000001          1     2 rmse    standard   500.       10  5.88  
+##  4    0.0000000001          1     2 rsq     standard     0.326    10  0.0149
+##  5    0.0000001             1     2 mae     standard   378.       10  3.96  
+##  6    0.0000001             1     2 mape    standard    27.6      10  1.41  
+##  7    0.0000001             1     2 rmse    standard   500.       10  5.88  
+##  8    0.0000001             1     2 rsq     standard     0.326    10  0.0149
+##  9    0.0001                1     2 mae     standard   378.       10  3.96  
+## 10    0.0001                1     2 mape    standard    27.6      10  1.41  
+## # ℹ 246 more rows
+## # ℹ 1 more variable: .config <chr>
+```
+
+``` r
+autoplot(tree_rs) + theme_light(base_family = "IBMPlexSans")
+```
+
+<img src="index_files/figure-html/unnamed-chunk-8-1.png" width="2400" />
+
+Looks like this data needs a fairly complex tree!
+
+We can examine or select the best sets of parameter options, chosen by whichever metric we want.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

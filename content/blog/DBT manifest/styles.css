@@ -1,0 +1,38 @@
+/* styles.css */
+
+/* Paragraphs */
+p {
+  margin-bottom: 2em; /* Adds double line spacing */
+  text-align: justify; /* Aligns text neatly */
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  text-align: center; /* Center-aligns headings */
+  margin-top: 1.5em; /* Adds spacing before headings */
+  margin-bottom: 1em; /* Adds spacing after headings */
+}
+
+/* Lists */
+ul, ol {
+  text-align: justify; /* Justifies list items */
+  margin-bottom: 2em; /* Adds double line spacing */
+}
+
+/* Block Quotes */
+blockquote {
+  text-align: justify; /* Justifies block quotes */
+  margin-bottom: 2em; /* Adds double line spacing */
+}
+
+/* Code Blocks */
+pre, code {
+  text-align: justify; /* Justifies code blocks */
+  margin-bottom: 2em; /* Adds double line spacing */
+}
+
+/* Ensure that figure captions are also justified */
+figcaption {
+  text-align: justify; /* Justifies figure captions */
+  margin-bottom: 2em; /* Adds double line spacing */
+}
